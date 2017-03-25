@@ -10,6 +10,12 @@ let campgrounds = [
     {name: "Salmon Creek", image: "https://s-media-cache-ak0.pinimg.com/originals/34/ec/3e/34ec3e5544694c0d6da7e476f283747a.jpg"},
     {name: "Granite Hill", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbh1nOLC3xu2zALrM1M-zyLxdGOqNv_tg0-bH9b1JBBUDwTqNd"},
     {name: "Mountain Goat's Rest", image: "http://nibler.ru/uploads/users/7075/2012-08-20/chebynkin-arsenixc-arseniy-krasivye-kartinki_405649275.jpg"},
+    {name: "Salmon Creek", image: "https://s-media-cache-ak0.pinimg.com/originals/34/ec/3e/34ec3e5544694c0d6da7e476f283747a.jpg"},
+    {name: "Granite Hill", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbh1nOLC3xu2zALrM1M-zyLxdGOqNv_tg0-bH9b1JBBUDwTqNd"},
+    {name: "Mountain Goat's Rest", image: "http://nibler.ru/uploads/users/7075/2012-08-20/chebynkin-arsenixc-arseniy-krasivye-kartinki_405649275.jpg"},
+    {name: "Salmon Creek", image: "https://s-media-cache-ak0.pinimg.com/originals/34/ec/3e/34ec3e5544694c0d6da7e476f283747a.jpg"},
+    {name: "Granite Hill", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbh1nOLC3xu2zALrM1M-zyLxdGOqNv_tg0-bH9b1JBBUDwTqNd"},
+    {name: "Mountain Goat's Rest", image: "http://nibler.ru/uploads/users/7075/2012-08-20/chebynkin-arsenixc-arseniy-krasivye-kartinki_405649275.jpg"},
 ];
 
 app.get("/", (req, res) => {
