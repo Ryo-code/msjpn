@@ -9,10 +9,11 @@ mongoose.connect("mongodb://localhost/yelp_camp"); //this line created the "yelp
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
-//SCHEMA SETUP
+//SCHEMA SETUP (note: schema is the structure/organization of a database)
 let campgroundSchema = new mongoose.Schema({
     name: String,
     image: String,
+    description: String
 });
 
 let Campground = mongoose.model("Campground", campgroundSchema); //This line turns the schema (ie. blueprint) of what a campground is, and compiles it into a model which has a bunch of methods like .find() and .create()
@@ -20,7 +21,8 @@ let Campground = mongoose.model("Campground", campgroundSchema); //This line tur
 // Campground.create(
 //     {
 //         name: "Nova", 
-//         image: "http://nibler.ru/uploads/users/7075/2012-08-20/chebynkin-arsenixc-arseniy-krasivye-kartinki_405649275.jpg"
+//         image: "http://nibler.ru/uploads/users/7075/2012-08-20/chebynkin-arsenixc-arseniy-krasivye-kartinki_405649275.jpg",
+//         description: "Pretty nice and sunny place"
 //     }, (err, campground) => {
 //         if(err){
 //             console.log(err);
@@ -28,40 +30,33 @@ let Campground = mongoose.model("Campground", campgroundSchema); //This line tur
 //             console.log("Newly created campground...:")
 //             console.log(campground)
 //         }
-//     });
+//     }
+// );
 
-let campgrounds = [
-    {name: "Salmon Creek", image: "https://s-media-cache-ak0.pinimg.com/originals/34/ec/3e/34ec3e5544694c0d6da7e476f283747a.jpg"},
-    {name: "Granite Hill", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbh1nOLC3xu2zALrM1M-zyLxdGOqNv_tg0-bH9b1JBBUDwTqNd"},
-    {name: "Mountain Goat's Rest", image: "http://nibler.ru/uploads/users/7075/2012-08-20/chebynkin-arsenixc-arseniy-krasivye-kartinki_405649275.jpg"},
-    {name: "Salmon Creek", image: "https://s-media-cache-ak0.pinimg.com/originals/34/ec/3e/34ec3e5544694c0d6da7e476f283747a.jpg"},
-    {name: "Granite Hill", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbh1nOLC3xu2zALrM1M-zyLxdGOqNv_tg0-bH9b1JBBUDwTqNd"},
-    {name: "Mountain Goat's Rest", image: "http://nibler.ru/uploads/users/7075/2012-08-20/chebynkin-arsenixc-arseniy-krasivye-kartinki_405649275.jpg"},
-    {name: "Salmon Creek", image: "https://s-media-cache-ak0.pinimg.com/originals/34/ec/3e/34ec3e5544694c0d6da7e476f283747a.jpg"},
-    {name: "Granite Hill", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbh1nOLC3xu2zALrM1M-zyLxdGOqNv_tg0-bH9b1JBBUDwTqNd"},
-    {name: "Mountain Goat's Rest", image: "http://nibler.ru/uploads/users/7075/2012-08-20/chebynkin-arsenixc-arseniy-krasivye-kartinki_405649275.jpg"},
-];
 
 app.get("/", (req, res) => {
    res.render("landing");
 });
 
+/* INDEX - show all campgrounds */
 app.get("/campgrounds", (req, res) => {
     //Get all campgrounds from DB, and THEN render that file
     Campground.find({}, (err, allCampgrounds) => {
         if(err){
             console.log(err);
         } else {
-            res.render("campgrounds", {campgrounds: allCampgrounds})
+            res.render("index", {campgrounds: allCampgrounds})
         }
     })
-    // res.render("campgrounds", {campgrounds: campgrounds}); 
 });
 
+/* CREATE - add new campground to DB */
 app.post("/campgrounds", (req, res) => {
     let name = req.body.name;
     let image = req.body.image;
-    let newCampground = {name: name, image: image}; //gets from data, adds to campgrounds array
+    let desc = req.body.description;
+
+    let newCampground = {name: name, image: image, description: desc}; //gets from data, adds to campgrounds array
     //Create a new campground and save to DB
     Campground.create(newCampground, (err, newlyCreated) => {
         if(err){
@@ -72,8 +67,21 @@ app.post("/campgrounds", (req, res) => {
     });
 });
 
+/* NEW - Show form to create a new campground */
 app.get("/campgrounds/new", (req, res) => {
     res.render("new");
+});
+
+/* SHOW - Shows more info about one campground */
+app.get("/campgrounds/:id", (req, res) => {
+    Campground.findById(req.params.id, (err, foundCampground) => {
+       if(err){
+           console.log(err);
+       } else {
+           res.render("show", {campground: foundCampground});
+           //this renders the show template with that campground
+       }
+    });
 });
 
 app.listen(3000, function () {
