@@ -1,22 +1,15 @@
 'use strict';
+
 let express     = require("express"),
     app         = express(),
     bodyParser  = require("body-parser"),
-    mongoose    = require("mongoose")
-//Some people apparently style their requires like this (機能は変わらない)
+    mongoose    = require("mongoose"),
+    Campground  = require("./models/campground"),
+    //Some people apparently style their requires like this (機能は変わらない)
 
 mongoose.connect("mongodb://localhost/yelp_camp"); //this line created the "yelp_camp" database the first time this file was run, and connected to it from then on (so it creates it if it doesn't exist yet)
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-
-//SCHEMA SETUP (note: schema is the structure/organization of a database)
-let campgroundSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    description: String
-});
-
-let Campground = mongoose.model("Campground", campgroundSchema); //This line turns the schema (ie. blueprint) of what a campground is, and compiles it into a model which has a bunch of methods like .find() and .create()
 
 // Campground.create(
 //     {
@@ -35,7 +28,7 @@ let Campground = mongoose.model("Campground", campgroundSchema); //This line tur
 
 
 app.get("/", (req, res) => {
-   res.render("landing");
+    res.render("landing");
 });
 
 /* INDEX - show all campgrounds */
@@ -75,12 +68,12 @@ app.get("/campgrounds/new", (req, res) => {
 /* SHOW - Shows more info about one campground */
 app.get("/campgrounds/:id", (req, res) => {
     Campground.findById(req.params.id, (err, foundCampground) => {
-       if(err){
-           console.log(err);
-       } else {
-           res.render("show", {campground: foundCampground});
-           //this renders the show template with that campground
-       }
+        if(err){
+            console.log(err);
+        } else {
+            res.render("show", {campground: foundCampground});
+            //this renders the show template with that campground
+        }
     });
 });
 
