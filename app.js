@@ -1,31 +1,16 @@
 'use strict';
 
-let express     = require("express"),
-    app         = express(),
-    bodyParser  = require("body-parser"),
-    mongoose    = require("mongoose"),
-    Campground  = require("./models/campground"),
-    //Some people apparently style their requires like this (機能は変わらない)
+const express     = require("express");
+const app         = express();
+const bodyParser  = require("body-parser");
+const mongoose    = require("mongoose");
+const Campground  = require("./models/campground");
+const seedDB      = require("./seeds"); //because you did "module.exports = seedDB" in seeds.js
 
-mongoose.connect("mongodb://localhost/yelp_camp"); //this line created the "yelp_camp" database the first time this file was run, and connected to it from then on (so it creates it if it doesn't exist yet)
+mongoose.connect("mongodb://localhost/yelp_camp"); //creates "yelp_camp" DB if it doesn't exist, connects to it if it does
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-
-// Campground.create(
-//     {
-//         name: "Nova", 
-//         image: "http://nibler.ru/uploads/users/7075/2012-08-20/chebynkin-arsenixc-arseniy-krasivye-kartinki_405649275.jpg",
-//         description: "Pretty nice and sunny place"
-//     }, (err, campground) => {
-//         if(err){
-//             console.log(err);
-//         } else {
-//             console.log("Newly created campground...:")
-//             console.log(campground)
-//         }
-//     }
-// );
-
+seedDB();
 
 app.get("/", (req, res) => {
     res.render("landing");
@@ -55,6 +40,7 @@ app.post("/campgrounds", (req, res) => {
         if(err){
             console.log("Oh no! " + err)
         } else {
+            console.log("Just created this in the DB: " + newlyCreated)
             res.redirect("/campgrounds"); //redirect back to campgrounds page
         }
     });
@@ -67,16 +53,17 @@ app.get("/campgrounds/new", (req, res) => {
 
 /* SHOW - Shows more info about one campground */
 app.get("/campgrounds/:id", (req, res) => {
-    Campground.findById(req.params.id, (err, foundCampground) => {
+    Campground.findById(req.params.id).populate("comments").exec((err, foundCampground) => {
         if(err){
             console.log(err);
         } else {
+            console.log(foundCampground);
             res.render("show", {campground: foundCampground});
             //this renders the show template with that campground
         }
     });
 });
 
-app.listen(3000, function () {
+app.listen(3000, () => {
   console.log('The YelpCamp Server has started (on port 3000)!')
 })
