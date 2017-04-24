@@ -29,6 +29,12 @@ passport.use(new LocalStrategy(User.authenticate()) ); //this gives us the ".aut
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+const isLoggedIn = (req, res, next) => { //Use this whenever you need to ensure the user is authenticated/logged in
+    if(req.isAuthenticated() ){
+        return next(); //This line means (if they're authenticated, move on to whatever is the NEXT thing)
+    }
+    res.redirect("/login"); //If they're not authenticated, redirect to the login page
+}
 
 //******ROUTES******
 app.get("/", (req, res) => {
@@ -88,7 +94,7 @@ app.get("/campgrounds/:id", (req, res) => {
 // COMMENTS ROUTES
 // ================
 
-app.get("/campgrounds/:id/comments/new", (req, res) => {
+app.get("/campgrounds/:id/comments/new", isLoggedIn, (req, res) => { //by adding "isLoggedIn", it runs this first. If user is authenticated, it runs the "next" code (which is the callback)
     Campground.findById(req.params.id, (err, campground) => {
         if(err){
             console.log(err);
@@ -98,7 +104,7 @@ app.get("/campgrounds/:id/comments/new", (req, res) => {
     })
 });
 
-app.post("/campgrounds/:id/comments", (req, res) => {
+app.post("/campgrounds/:id/comments", isLoggedIn, (req, res) => {
    //lookup campground using ID
    Campground.findById(req.params.id, (err, campground) => {
        if(err){
