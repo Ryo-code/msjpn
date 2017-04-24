@@ -4,15 +4,33 @@ const express     = require("express");
 const app         = express();
 const bodyParser  = require("body-parser");
 const mongoose    = require("mongoose");
+const passport    = require("passport");
+const LocalStrategy = require("passport-local");
 const Campground  = require("./models/campground");
 const Comment     = require("./models/comment");
+const User        = require("./models/user")
 const seedDB      = require("./seeds"); //because you did "module.exports = seedDB" in seeds.js
 
 mongoose.connect("mongodb://localhost/yelp_camp"); //creates "yelp_camp" DB if it doesn't exist, connects to it if it does
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
+app.use(express.static(__dirname + "/public")); //we did 「express.static("public")」 before, but "__dirname" just refers to the directory name of the current module which is safer in case you change around your files or whatever (feel free to console log __dirname for proof)
 seedDB();
 
+//*****PASSPORT CONFIGURATION*****
+app.use(require("express-session")({
+    secret: "Web development is cool!",
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
+//******ROUTES******
 app.get("/", (req, res) => {
     res.render("landing");
 });
@@ -103,6 +121,18 @@ app.post("/campgrounds/:id/comments", (req, res) => {
        }
    });
 });
+
+// ================
+//   AUTH ROUTES
+// ================
+
+app.get("/register", (req, res) =>{
+    res.render("register")
+})
+
+app.post("/register", (req, res) =>{
+    res.send("Signing you up...");
+})
 
 app.listen(3000, () => {
   console.log('The YelpCamp Server has started (on port 3000)!')
