@@ -8,8 +8,8 @@ const passport    = require("passport");
 const LocalStrategy = require("passport-local");
 const Campground  = require("./models/campground");
 const Comment     = require("./models/comment");
-const User        = require("./models/user")
-const seedDB      = require("./seeds"); //because you did "module.exports = seedDB" in seeds.js
+const User        = require("./models/user");
+const seedDB      = require("./seeds");
 
 mongoose.connect("mongodb://localhost/yelp_camp"); //creates "yelp_camp" DB if it doesn't exist, connects to it if it does
 app.use(bodyParser.urlencoded({extended: true}));
@@ -127,12 +127,21 @@ app.post("/campgrounds/:id/comments", (req, res) => {
 // ================
 
 app.get("/register", (req, res) =>{
-    res.render("register")
+    res.render("register");
 })
 
 app.post("/register", (req, res) =>{
-    res.send("Signing you up...");
-})
+    const newUser = new User({username: req.body.username});
+    User.register(newUser, req.body.password, (err, user) => {
+        if(err){
+            console.log(err);
+            return res.render("register"); //we use "return" as a clever way to GTFO of the callback
+        }
+        passport.authenticate("local")(req, res, () => {
+            res.redirect("/campgrounds");
+        });
+    });
+});
 
 app.listen(3000, () => {
   console.log('The YelpCamp Server has started (on port 3000)!')
