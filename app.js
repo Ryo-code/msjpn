@@ -29,6 +29,11 @@ passport.use(new LocalStrategy(User.authenticate()) ); //this gives us the ".aut
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use((req, res, next) =>{           //This will run for every single route.
+    res.locals.currentUser = req.user; //Whatever we put in "res.locals" is what's available inside of the user's current template
+    next();
+})
+
 const isLoggedIn = (req, res, next) => { //Use this whenever you need to ensure the user is authenticated/logged in
     if(req.isAuthenticated() ){
         return next(); //This line means (if they're authenticated, move on to whatever is the NEXT thing)
@@ -43,12 +48,13 @@ app.get("/", (req, res) => {
 
 /* INDEX - show all campgrounds */
 app.get("/campgrounds", (req, res) => {
+    console.log(req.user)
     //Get all campgrounds from DB, and THEN render that file
     Campground.find({}, (err, allCampgrounds) => {
         if(err){
             console.log(err);
         } else {
-            res.render("campgrounds/index", {campgrounds: allCampgrounds})
+            res.render("campgrounds/index", {campgrounds: allCampgrounds, currentUser: req.user})
         }
     })
 });
@@ -161,6 +167,11 @@ app.post("/login", passport.authenticate("local",       // The ".authenticate" m
         successRedirect: "/campgrounds",
         failureRedirect: "/login"
     }), (req, res) => {
+});
+
+app.get("/logout", (req, res) => {
+    req.logout();
+    res.redirect("/campgrounds");
 });
 
 app.listen(3000, () => {
