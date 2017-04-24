@@ -25,7 +25,7 @@ app.use(require("express-session")({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
+passport.use(new LocalStrategy(User.authenticate()) ); //this gives us the ".authenticate" method in the login post route
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -133,14 +133,28 @@ app.get("/register", (req, res) =>{
 app.post("/register", (req, res) =>{
     const newUser = new User({username: req.body.username});
     User.register(newUser, req.body.password, (err, user) => {
+        //The coe is written so that  if there's no error, you can skip to the authentication below (similar to login)
         if(err){
             console.log(err);
             return res.render("register"); //we use "return" as a clever way to GTFO of the callback
         }
-        passport.authenticate("local")(req, res, () => {
+        passport.authenticate("local")(req, res, () => { 
             res.redirect("/campgrounds");
         });
     });
+});
+
+app.get("/login", (req, res) => {
+    res.render("login")
+})
+
+//***The following lines of code are essentially:「app.post(route, middleware, callback)」****
+app.post("/login", passport.authenticate("local",       // The ".authenticate" method takes the
+    //form's req.body.password & req.body.username, and searches for them in the DB (ie. authenticates them)
+    {
+        successRedirect: "/campgrounds",
+        failureRedirect: "/login"
+    }), (req, res) => {
 });
 
 app.listen(3000, () => {
