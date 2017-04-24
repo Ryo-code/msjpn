@@ -4,6 +4,7 @@ const router = express.Router();
 const passport = require("passport");
 const User = require("../models/user");
 
+//Middleware
 const isLoggedIn = (req, res, next) => { //Use this whenever you need to ensure the user is authenticated/logged in
     if(req.isAuthenticated() ){
         return next(); //This line means (if they're authenticated, move on to whatever is the NEXT thing)
@@ -11,21 +12,17 @@ const isLoggedIn = (req, res, next) => { //Use this whenever you need to ensure 
     res.redirect("/login"); //If they're not authenticated, redirect to the login page
 }
 
-// ================
-//   AUTH ROUTES
-// ================
-
-
-//******ROUTES******
+//Root route
 router.get("/", (req, res) => {
     res.render("landing");
 });
 
-
+//Show register form
 router.get("/register", (req, res) =>{
     res.render("register");
-})
+});
 
+//Handle sign up logic
 router.post("/register", (req, res) =>{
     const newUser = new User({username: req.body.username});
     User.register(newUser, req.body.password, (err, user) => {
@@ -34,16 +31,18 @@ router.post("/register", (req, res) =>{
             console.log(err);
             return res.render("register"); //we use "return" as a clever way to GTFO of the callback
         }
-        passport.authenticate("local")(req, res, () => { 
+        passport.authenticate("local")(req, res, () => {
             res.redirect("/campgrounds");
         });
     });
 });
 
+//Show Login Form
 router.get("/login", (req, res) => {
-    res.render("login")
+    res.render("login");
 })
 
+//Handle login logic
 //***The following lines of code are essentially:「app.post(route, middleware, callback)」****
 router.post("/login", passport.authenticate("local",       // The ".authenticate" method takes the
     //form's req.body.password & req.body.username, and searches for them in the DB (ie. authenticates them)
@@ -53,6 +52,7 @@ router.post("/login", passport.authenticate("local",       // The ".authenticate
     }), (req, res) => {
 });
 
+//Logout route
 router.get("/logout", (req, res) => {
     req.logout();
     res.redirect("/campgrounds");

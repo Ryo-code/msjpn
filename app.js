@@ -11,9 +11,10 @@ const Comment     = require("./models/comment");
 const User        = require("./models/user");
 const seedDB      = require("./seeds");
 
+//Requiring Routes
 const commentRoutes     = require("./routes/comments");
 const campgroundRoutes  = require("./routes/campgrounds");
-const indexRoutes        = require("./routes/index") //Could also have been called "authRoutes" ;)
+const indexRoutes       = require("./routes/index") //Could also have been called "authRoutes" ;)
 
 mongoose.connect("mongodb://localhost/yelp_camp"); //creates "yelp_camp" DB if it doesn't exist, connects to it if it does
 app.use(bodyParser.urlencoded({extended: true}));
@@ -39,8 +40,8 @@ app.use((req, res, next) =>{           //This will run for every single route.
 });
 
 app.use(indexRoutes);
-app.use(campgroundRoutes);
-app.use(commentRoutes);
+app.use("/campgrounds", campgroundRoutes); //All the campgrounds routes start this way, so in routes/campgrounds.js, you don't need to write that anymore (just what comes after that)
+app.use("/campgrounds/:id/comments", commentRoutes); //Same thing for comments... this just keeps the code DRY
 
 app.listen(3000, () => {
   console.log('The YelpCamp Server has started (on port 3000)!')

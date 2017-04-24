@@ -1,10 +1,10 @@
 'use strict'
 const express = require("express");
-const router = express.Router();
+const router = express.Router({mergeParams: true}); //this merges the parameters from campgrounds & comments together
 const Campground = require("../models/campground")
 const Comment = require("../models/comment")
 
-
+//Middleware
 const isLoggedIn = (req, res, next) => {
     if(req.isAuthenticated() ){
         return next();
@@ -12,12 +12,8 @@ const isLoggedIn = (req, res, next) => {
     res.redirect("/login");
 }
 
-
-// ================
-// COMMENTS ROUTES
-// ================
-
-router.get("/campgrounds/:id/comments/new", isLoggedIn, (req, res) => { //by adding "isLoggedIn", it runs this first. If user is authenticated, it runs the "next" code (which is the callback)
+//Comments New
+router.get("/new", isLoggedIn, (req, res) => { //by adding "isLoggedIn", it runs this first. If user is authenticated, it runs the "next" code (which is the callback)
     Campground.findById(req.params.id, (err, campground) => {
         if(err){
             console.log(err);
@@ -27,7 +23,8 @@ router.get("/campgrounds/:id/comments/new", isLoggedIn, (req, res) => { //by add
     })
 });
 
-router.post("/campgrounds/:id/comments", isLoggedIn, (req, res) => {
+//Comments Create
+router.post("/", isLoggedIn, (req, res) => {
    //lookup campground using ID
    Campground.findById(req.params.id, (err, campground) => {
        if(err){
