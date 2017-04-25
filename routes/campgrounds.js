@@ -3,6 +3,14 @@ const express = require("express");
 const router = express.Router();
 const Campground = require("../models/campground")
 
+//Middleware
+const isLoggedIn = (req, res, next) => {
+    if(req.isAuthenticated() ){
+        return next();
+    }
+    res.redirect("/login");
+}
+
 /* INDEX - show all campgrounds */
 router.get("/", (req, res) => {
     console.log(req.user)
@@ -11,18 +19,21 @@ router.get("/", (req, res) => {
         if(err){
             console.log(err);
         } else {
-            res.render("campgrounds/index", {campgrounds: allCampgrounds, currentUser: req.user})
+            res.render("campgrounds/index", {campgrounds: allCampgrounds})
         }
-    })
+    });
 });
 
 /* CREATE - add new campground to DB */
-router.post("/", (req, res) => {
-    let name = req.body.name;
-    let image = req.body.image;
-    let desc = req.body.description;
-
-    let newCampground = {name: name, image: image, description: desc}; //gets from data, adds to campgrounds array
+router.post("/", isLoggedIn, (req, res) => {
+    const name = req.body.name;
+    const image = req.body.image;
+    const desc = req.body.description;
+    const author = {
+        id: req.user._id,
+        username: req.user.username
+    }
+    const newCampground = {name: name, image: image, description: desc, author: author}; //gets from data, adds to campgrounds array
     //Create a new campground and save to DB
     Campground.create(newCampground, (err, newlyCreated) => {
         if(err){
@@ -35,7 +46,7 @@ router.post("/", (req, res) => {
 });
 
 /* NEW - Show form to create a new campground */
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
     res.render("campgrounds/new");
 });
 
