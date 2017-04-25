@@ -11,7 +11,7 @@ const isLoggedIn = (req, res, next) => {
     res.redirect("/login");
 }
 
-const checkCampgroundOwnership(req, res, next)=>{
+const checkCampgroundOwnership = (req, res, next)=>{
         if(req.isAuthenticated()){
         Campground.findById(req.params.id, (err, foundCampground) =>{
             if(err){
@@ -19,7 +19,7 @@ const checkCampgroundOwnership(req, res, next)=>{
                 res.redirect("back"); //This will take the user back to the previous page they were on
             } else {
                 //Does the user own the campground?
-                if(foundCampground.author.id.equals(req.user._id)){ 
+                if(foundCampground.author.id.equals(req.user._id)){  //Need .equals instead of === or ==, because those two values are identical except for the fact that one's a mongoose object and the other's a string
                     next();
                 } else {
                    res.redirect("back");
@@ -91,7 +91,7 @@ router.get("/:id/edit", checkCampgroundOwnership, (req, res) => {
 });
 
 /* UPDATE - This is where the form submits*/
-router.put("/:id", (req, res) =>{
+router.put("/:id", checkCampgroundOwnership, (req, res) =>{
     //find and update the correct campground
     //The arguments below: 1) what ID we're looking for, 2) the data that we wanna update, 3) callback
     Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, updatedCampground) => {
@@ -105,7 +105,7 @@ router.put("/:id", (req, res) =>{
 })
 
 /* DESTROY - Delete campground */
-router.delete("/:id", (req, res) =>{
+router.delete("/:id", checkCampgroundOwnership, (req, res) =>{
     Campground.findByIdAndRemove(req.params.id, (err) => {
         if(err){
             console.log("There was an error->", err)
