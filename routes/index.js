@@ -26,7 +26,7 @@ router.get("/register", (req, res) =>{
 router.post("/register", (req, res) =>{
     const newUser = new User({username: req.body.username});
     User.register(newUser, req.body.password, (err, user) => {
-        //The coe is written so that  if there's no error, you can skip to the authentication below (similar to login)
+        //The code is written so that  if there's no error, you can skip to the authentication below (similar to login)
         if(err){
             console.log(err);
             return res.render("register"); //we use "return" as a clever way to GTFO of the callback

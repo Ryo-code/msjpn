@@ -20,7 +20,7 @@ mongoose.connect("mongodb://localhost/yelp_camp"); //creates "yelp_camp" DB if i
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public")); //we did 「express.static("public")」 before, but "__dirname" just refers to the directory name of the current module which is safer in case you change around your files or whatever (feel free to console log __dirname for proof)
-seedDB();
+// seedDB(); //Seed the DB
 
 //*****PASSPORT CONFIGURATION*****
 app.use(require("express-session")({
