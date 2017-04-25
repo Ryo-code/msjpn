@@ -11,6 +11,26 @@ const isLoggedIn = (req, res, next) => {
     res.redirect("/login");
 }
 
+const checkCampgroundOwnership(req, res, next)=>{
+        if(req.isAuthenticated()){
+        Campground.findById(req.params.id, (err, foundCampground) =>{
+            if(err){
+                console.log("An error occurred here...", err)
+                res.redirect("back"); //This will take the user back to the previous page they were on
+            } else {
+                //Does the user own the campground?
+                if(foundCampground.author.id.equals(req.user._id)){ 
+                    next();
+                } else {
+                   res.redirect("back");
+                }
+            }
+        });
+    } else {
+        res.redirect("back");
+    }
+}
+
 /* INDEX - show all campgrounds */
 router.get("/", (req, res) => {
     console.log(req.user)
@@ -64,16 +84,11 @@ router.get("/:id", (req, res) => {
 });
 
 /* EDIT - This shows the edit form */
-router.get("/:id/edit", (req, res) => {
+router.get("/:id/edit", checkCampgroundOwnership, (req, res) => {
     Campground.findById(req.params.id, (err, foundCampground) =>{
-        if(err){
-            res.residrect("/campgrounds");
-        } else {
-            console.log("this is being passed to the edit form... --->", foundCampground)
-            res.render("campgrounds/edit", {campground: foundCampground});
-        }
-    })
-})
+        res.render("campgrounds/edit", {campground: foundCampground})
+    });
+});
 
 /* UPDATE - This is where the form submits*/
 router.put("/:id", (req, res) =>{
