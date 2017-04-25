@@ -63,4 +63,33 @@ router.get("/:id", (req, res) => {
     });
 });
 
+/* EDIT - This shows the edit form */
+router.get("/:id/edit", (req, res) => {
+    Campground.findById(req.params.id, (err, foundCampground) =>{
+        if(err){
+            res.residrect("/campgrounds");
+        } else {
+            console.log("this is being passed to the edit form... --->", foundCampground)
+            res.render("campgrounds/edit", {campground: foundCampground});
+        }
+    })
+})
+
+/* UPDATE - This is where the form submits*/
+router.put("/:id", (req, res) =>{
+    //find and update the correct campground
+    //The arguments below: 1) what ID we're looking for, 2) the data that we wanna update, 3) callback
+    Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, updatedCampground) => {
+        if(err){
+            res.redirect("/campgrounds");
+        } else {
+            //redirect somewhere(show page)
+            res.redirect("/campgrounds/" + req.params.id)
+        }
+    }) 
+})
+
+/* DELETE */
+
+
 module.exports = router;
