@@ -4,14 +4,6 @@ const router = express.Router();
 const passport = require("passport");
 const User = require("../models/user");
 
-//Middleware
-const isLoggedIn = (req, res, next) => { //Use this whenever you need to ensure the user is authenticated/logged in
-    if(req.isAuthenticated() ){
-        return next(); //This line means (if they're authenticated, move on to whatever is the NEXT thing)
-    }
-    res.redirect("/login"); //If they're not authenticated, redirect to the login page
-}
-
 //Root route
 router.get("/", (req, res) => {
     res.render("landing");
