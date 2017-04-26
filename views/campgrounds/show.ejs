@@ -23,7 +23,7 @@
                         <a class="btn btn-warning" href="/campgrounds/<%= campground._id%>/edit"> 
                             Edit Campground 
                         </a>
-                        <form id="delete-form" action="/campgrounds/<%=campground._id %>?_method=DELETE" method="POST">
+                        <form class="delete-form" action="/campgrounds/<%=campground._id %>?_method=DELETE" method="POST">
                             <input type="submit" class="btn btn-danger" value="Delete">
                         </form>
                     <% } %>
@@ -48,6 +48,11 @@
                             >
                                 Edit
                             </a>
+                            <!--The delete route must be a form, because unlike the anchor tag above, forms can make POST requests (a tags only make GET reqs)-->
+                            <form class="delete-form" action="/campgrounds/<%=campground._id %>/comments/<%=comment._id %>?_method=DELETE" method="POST">
+                                <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                            </form>
+
                         </div>
                     </div>
                 <% }) %>
