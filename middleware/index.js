@@ -6,7 +6,7 @@ const Comment = require("../models/comment");
 var middlewareObj = {};
 
 middlewareObj.checkCampgroundOwnership = (req, res, next) => {
- if(req.isAuthenticated()){
+    if(req.isAuthenticated()){
         Campground.findById(req.params.id, function(err, foundCampground){
            if(err){
                res.redirect("back");
@@ -25,7 +25,7 @@ middlewareObj.checkCampgroundOwnership = (req, res, next) => {
 }
 
 middlewareObj.checkCommentOwnership = (req, res, next) => {
- if(req.isAuthenticated()){
+    if(req.isAuthenticated()){
         Comment.findById(req.params.comment_id, (err, foundComment) => {
            if(err){
                res.redirect("back");
@@ -47,7 +47,9 @@ middlewareObj.isLoggedIn = (req, res, next) => {
     if(req.isAuthenticated()){
         return next();
     }
-    res.redirect("/login");
+    req.flash("error", "Please log in first!"); //In parentheses is really a key & value pair.
+        //.flash doesn't actually render right away. The flash msg will render on the next page (ie. after redirecting to login)
+    res.redirect("/login"); //The flash msg must be handled in 「routes/index」
 }
 
 module.exports = middlewareObj;
