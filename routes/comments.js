@@ -12,6 +12,26 @@ const isLoggedIn = (req, res, next) => {
     res.redirect("/login");
 }
 
+const checkCommentOwnership = (req, res, next) => {
+    if(req.isAuthenticated()){
+        Comment.findById(req.params.comment_id, (err, foundComment) => {
+            if(err){
+                console.log("An error occurred here...", err)
+                res.redirect("back");
+            } else {
+                //Does the user own the comment?
+                if(foundComment.author.id.equals(req.user._id)){  //"req.user._id" is the login user's id (stored inside "req.user", thanks to passport)
+                    next();
+                } else {
+                   res.redirect("back");
+                }
+            }
+        });
+    } else {
+        res.redirect("back");
+    }
+}
+
 //Comments New
 router.get("/new", isLoggedIn, (req, res) => { //by adding "isLoggedIn", it runs this first. If user is authenticated, it runs the "next" code (which is the callback)
     Campground.findById(req.params.id, (err, campground) => {
@@ -55,9 +75,8 @@ router.post("/", isLoggedIn, (req, res) => {
    });
 });
 
-
 // Comments Edit
-router.get("/:comment_id/edit", (req, res) => {
+router.get("/:comment_id/edit", checkCommentOwnership, (req, res) => {
    Comment.findById(req.params.comment_id, (err, foundComment) => {
       if(err){
           res.redirect("back");
@@ -79,7 +98,7 @@ router.put("/:comment_id", (req, res) => {
 });
 
 // Comments Destroy
-router.delete("/:comment_id", (req, res) => {
+router.delete("/:comment_id", checkCommentOwnership, (req, res) => {
     //findByIdAndRemove
     Comment.findByIdAndRemove(req.params.comment_id, (err) => {
        if(err){

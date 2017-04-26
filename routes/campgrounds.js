@@ -12,7 +12,7 @@ const isLoggedIn = (req, res, next) => {
 }
 
 const checkCampgroundOwnership = (req, res, next)=>{
-        if(req.isAuthenticated()){
+    if(req.isAuthenticated()){
         Campground.findById(req.params.id, (err, foundCampground) =>{
             if(err){
                 console.log("An error occurred here...", err)
