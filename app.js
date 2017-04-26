@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public")); //we did 「express.static("public")」 before, but "__dirname" just refers to the directory name of the current module which is safer in case you change around your files or whatever (feel free to console log __dirname for proof)
 app.use(methodOverride("_method"));
-app.use(flash());
+app.use(flash()); //Must be before the passport configuration
 // seedDB(); //Seed the DB
 
 //*****PASSPORT CONFIGURATION*****
@@ -40,6 +40,8 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) =>{           //This will run for every single route.
     res.locals.currentUser = req.user; //Whatever we put in "res.locals" is what's available inside of the user's current template
+    res.locals.error = req.flash("error"); //Since you use "message" in your header partial, this makes it able to access message on all the pages with that header
+    res.locals.success = req.flash("success");
     next();
 });
 
