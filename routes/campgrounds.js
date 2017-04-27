@@ -22,11 +22,12 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
     const name = req.body.name;
     const image = req.body.image;
     const desc = req.body.description;
+    const price = req.body.price;
     const author = {
         id: req.user._id,
         username: req.user.username
     }
-    const newCampground = {name: name, image: image, description: desc, author: author}; //gets from data, adds to campgrounds array
+    const newCampground = {name: name, image: image, description: desc, price: price, author: author}; //gets from data, adds to campgrounds array
     //Create a new campground and save to DB
     Campground.create(newCampground, (err, newlyCreated) => {
         if(err){
@@ -59,6 +60,9 @@ router.get("/:id", (req, res) => {
 /* EDIT - This shows the edit form */
 router.get("/:id/edit", middleware.checkCampgroundOwnership, (req, res) => {
     Campground.findById(req.params.id, (err, foundCampground) =>{
+        if(err){
+            req.flash("error", "Campground not found") //Unlikely someone will ever see this, but you can handle errors like this anywhere
+        }
         res.render("campgrounds/edit", {campground: foundCampground})
     });
 });
