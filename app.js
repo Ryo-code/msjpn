@@ -26,6 +26,8 @@ app.use(methodOverride("_method"));
 app.use(flash()); //Must be before the passport configuration
 // seedDB(); //Seed the DB
 
+app.locals.moment = require("moment"); //moment.js now available in all your view files via the variable name "moment"
+
 //*****PASSPORT CONFIGURATION*****
 app.use(require("express-session")({
     secret: "Web development is cool!",

@@ -4,6 +4,7 @@ const mongoose      = require("mongoose");
 //SCHEMA SETUP (note: schema is the structure/organization of a database)
 const commentSchema = new mongoose.Schema({
     text: String,
+    createdAt: { type: Date, default: Date.now },
     author: { //"author" now is an object with a username & id
         id: {
             type: mongoose.Schema.Types.ObjectId,
