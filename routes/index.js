@@ -11,7 +11,7 @@ router.get("/", (req, res) => {
 
 //Show register form
 router.get("/register", (req, res) =>{
-    res.render("register");
+   res.render("register", {page: 'register'}); 
 });
 
 //Handle sign up logic
@@ -20,10 +20,12 @@ router.post("/register", (req, res) =>{
     User.register(newUser, req.body.password, (err, user) => {
         //The code is written so that  if there's no error, you can skip to the authentication below (similar to login)
         if(err){
-            console.log(err);
-            return res.render("register"); //we use "return" as a clever way to GTFO of the callback
+            console.log("Here's your fancy ERR object! -->", err);
+            return res.redirect(".register", {error: err.message}); 
+            //Instead of writing out a string, you can just use "err.message" as the flash msg. And we use "return" as a clever way to GTFO of the callback
         }
         passport.authenticate("local")(req, res, () => {
+            req.flash("success", "Welcome to YelpCamp " + user.username);
             res.redirect("/campgrounds");
         });
     });
@@ -31,7 +33,7 @@ router.post("/register", (req, res) =>{
 
 //Show Login Form
 router.get("/login", (req, res) => {
-    res.render("login");
+   res.render("login", {page: 'login'}); //not sure what the stuff in the {} means...
 })
 
 //Handle login logic
