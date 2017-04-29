@@ -6,7 +6,10 @@ const campgroundSchema = new mongoose.Schema({
     name: String,
     image: String,
     description: String,
-    price: String,
+    price: Number,
+    location: String,
+    lat: Number,
+    lng: Number,
     createdAt: { type: Date, default: Date.now },
     author: {
         id: {
@@ -20,10 +23,10 @@ const campgroundSchema = new mongoose.Schema({
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Comment"
-        }    
+        }
     ]
 });
 
-module.exports = mongoose.model("Campground", campgroundSchema); 
+module.exports = mongoose.model("Campground", campgroundSchema);
 //This line turns the schema (ie. blueprint) of what a campground is, and
 //compiles it into a model which has a bunch of methods like .find() & .create()
