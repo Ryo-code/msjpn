@@ -7,7 +7,7 @@ const mongoose      = require("mongoose");
 const passport      = require("passport");
 const LocalStrategy = require("passport-local");
 const methodOverride = require("method-override");
-const flash         = require("connect-flash"); 
+const flash         = require("connect-flash");
 const Campground    = require("./models/campground");
 const Comment       = require("./models/comment");
 const User          = require("./models/user");
@@ -18,7 +18,10 @@ const commentRoutes     = require("./routes/comments");
 const campgroundRoutes  = require("./routes/campgrounds");
 const indexRoutes       = require("./routes/index") //Could also have been called "authRoutes" ;)
 
-mongoose.connect("mongodb://localhost/yelp_camp"); //creates "yelp_camp" DB if it doesn't exist, connects to it if it does
+console.log("Here's what the DATABASEURL environmental variable is:", process.env.DATABASEURL)
+const url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp" //Someone who clones this project will be able to create their own local DB with this code, because the enviro variable won't work for them
+mongoose.connect(url); //This is much more secure than having your DB name & password entered in your code (especially if it's open-source!)
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public")); //we did 「express.static("public")」 before, but "__dirname" just refers to the directory name of the current module which is safer in case you change around your files or whatever (feel free to console log __dirname for proof)
