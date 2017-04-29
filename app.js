@@ -19,7 +19,7 @@ const campgroundRoutes  = require("./routes/campgrounds");
 const indexRoutes       = require("./routes/index") //Could also have been called "authRoutes" ;)
 
 console.log("Here's what the DATABASEURL environmental variable is:", process.env.DATABASEURL)
-const url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp" //Someone who clones this project will be able to create their own local DB with this code, because the enviro variable won't work for them
+const url = process.env.DATABASEURL || "mongodb://localhost/must_see_japan" //Someone who clones this project will be able to create their own local DB with this code, because the enviro variable won't work for them
 mongoose.connect(url); //This is much more secure than having your DB name & password entered in your code (especially if it's open-source!)
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -55,5 +55,5 @@ app.use("/campgrounds", campgroundRoutes); //All the campgrounds routes start th
 app.use("/campgrounds/:id/comments", commentRoutes); //Same thing for comments... this just keeps the code DRY
 
 app.listen(3000, () => {
-  console.log('The YelpCamp Server has started (on port 3000)!')
+  console.log('The server has started (on port 3000)!')
 })

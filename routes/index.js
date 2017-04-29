@@ -25,7 +25,7 @@ router.post("/register", (req, res) =>{
             //Instead of writing out a string, you can just use "err.message" as the flash msg. And we use "return" as a clever way to GTFO of the callback
         }
         passport.authenticate("local")(req, res, () => {
-            req.flash("success", "Welcome to YelpCamp " + user.username);
+            req.flash("success", "Welcome to Must-See Japan, " + user.username);
             res.redirect("/campgrounds");
         });
     });
