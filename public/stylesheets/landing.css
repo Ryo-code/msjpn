@@ -2,6 +2,10 @@ body {
   background-color: black;
 }
 
+.welcome-msg{
+  background: rgba(0, 0, 0, .5);
+}
+
 #landing-header {
   z-index: 1;
   position: relative;
@@ -11,6 +15,7 @@ body {
 
 #landing-header h1 {
   color: #fff;
+  padding: .4em;
 }
 
 .slideshow { 
@@ -43,23 +48,23 @@ body {
 }
 
 .slideshow li:nth-child(1) { 
-  background-image: url(http://i.imgur.com/K3mPv14.jpg) 
+  background-image: url(http://images.unsplash.com/photo-1445539348538-d540ff031729?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&s=cd1e411a6f8713e5065ca7e845090953) 
   /*To do it locally, you'll wanna stick images inside an "images" folder in the "public" directory */
 }
 .slideshow li:nth-child(2) { 
-  background-image: url(http://i.imgur.com/SBEmFpv.jpg);
+  background-image: url(https://images.unsplash.com/photo-1471991750293-5fc0e377b550?dpr=2&auto=format&fit=crop&w=1199&h=698&q=80&cs=tinysrgb&crop=&bg=);
   animation-delay: 10s; 
 }
 .slideshow li:nth-child(3) { 
-  background-image: url(http://i.imgur.com/emvhOnb.jpg);
+  background-image: url(https://images.unsplash.com/photo-1440342359743-84fcb8c21f21?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&s=7dae758a7173e826b2b931ca58512f83);
   animation-delay: 20s; 
 }
 .slideshow li:nth-child(4) { 
-  background-image: url(http://i.imgur.com/2LSMCmJ.jpg);
+  background-image: url(https://images.unsplash.com/photo-1415697747654-db820a209c6f?dpr=2&auto=format&fit=crop&w=1199&h=800&q=80&cs=tinysrgb&crop=&bg=);
   animation-delay: 30s; 
 }
 .slideshow li:nth-child(5) { 
-  background-image: url(http://i.imgur.com/TVGe0Ef.jpg);
+  background-image: url(https://images.unsplash.com/photo-1478039414627-50a2aee2e122?dpr=2&auto=format&fit=crop&w=1199&h=1799&q=80&cs=tinysrgb&crop=&bg=);
   animation-delay: 40s; 
 }
 
