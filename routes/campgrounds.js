@@ -1,9 +1,10 @@
 'use strict'
-const express = require("express");
-const router = express.Router();
+const express    = require("express");
+const router     = express.Router();
 const Campground = require("../models/campground");
 const middleware = require("../middleware");
-const geocoder = require("geocoder");
+const geocoder   = require("geocoder");
+const fs         = require("fs");
 
 /* INDEX - show all campgrounds */
 router.get("/", (req, res) => {
@@ -13,7 +14,7 @@ router.get("/", (req, res) => {
         if(err){
             console.log(err);
         } else {
-            res.render("campgrounds/index",{campgrounds:allCampgrounds});
+            res.render("campgrounds/index", {campgrounds: allCampgrounds});
         }
     });
 });
