@@ -19,3 +19,8 @@
     height: 400px;
     width: 100%;
 }
+
+.jumbo-pic{
+    background-size: cover;
+    background-image: url(http://www.wendytour-th.com/img/pagetop_header_banner/tokyo_fuji_sakura.jpg);
+}
