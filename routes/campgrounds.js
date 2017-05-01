@@ -5,6 +5,9 @@ const Campground = require("../models/campground");
 const middleware = require("../middleware");
 const geocoder   = require("geocoder");
 const fs         = require("fs");
+const fileUpload = require('express-fileupload');
+
+
 
 /* INDEX - show all campgrounds */
 router.get("/", (req, res) => {
@@ -21,19 +24,31 @@ router.get("/", (req, res) => {
 
 /* CREATE - add new campground to DB */
 router.post("/", middleware.isLoggedIn, (req, res) => {
+    const uploadedImage = req.files.uploadIMG
+    console.log("The whole req.files object", req.files)
+    console.log(uploadedImage)
+
     const name = req.body.name;
-    const image = req.body.image;
+    // const image = req.body.image;
     const desc = req.body.description;
     const price = req.body.price;
     const author = {
         id: req.user._id,
         username: req.user.username
     }
+    
+    // Use the mv() method to place the file somewhere on your server (This is part of express-fileupload)
+    sampleFile.mv('/somewhere/on/your/server/filename.jpg', (err) => {
+        if (err){
+            return res.status(500).send(err);
+        }
+    });
+
     geocoder.geocode(req.body.location,  (err, data) => {
         const lat = data.results[0].geometry.location.lat;
         const lng = data.results[0].geometry.location.lng;
         const location = data.results[0].formatted_address;
-        const newCampground = {name: name, image: image, description: desc, price: price, author:author, location: location, lat: lat, lng: lng};
+        const newCampground = {name: name, image: uploadedImage, description: desc, price: price, author:author, location: location, lat: lat, lng: lng};
         // Create a new campground and save to DB
         Campground.create(newCampground, (err, newlyCreated) => {
             if(err){
