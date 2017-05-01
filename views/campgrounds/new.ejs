@@ -6,11 +6,11 @@
 
         <form action="/campgrounds" method="POST">
             <div class="form-group">
-                <label for="location">Title</label>
+                <label for="title">Title</label>
                 <input class="form-control" type="text" name="name" placeholder="ex. Partying Under Cherry Blossom Tree">
             </div>
             <div class="form-group">
-                <label for="location">Description</label>
+                <label for="description">Description</label>
                 <input class="form-control" type="text" name="description" placeholder="Describe the image">
             </div>
             <!--<div class="form-group">
@@ -21,11 +21,12 @@
                 <label for="location">Location</label>
                 <input class="form-control" type="text" name="location" id="location" placeholder="ex. Gion, Kyoto">
             </div>
-            <!--<div class="form-group">
-                <input class="form-control" type="text" name="image" placeholder="image url">
-            </div>-->
-
             <div class="form-group">
+                <label for="image">Image</label>
+                <input class="form-control" type="text" name="image" placeholder="image url">
+            </div>
+
+            <!--<div class="form-group">
                 <label for="location">Upload Picture</label>
                 <img id="uploadPreview" style="width: 12em; height: 10em;" />
                 <input id="uploadImage" type="file" name="uploadIMG" onchange="PreviewImage();" />
@@ -39,8 +40,7 @@
                         };
                     };
                 </script>
-                <!--<input type="file" name="pic-upload" accept="image/*">-->
-            </div>
+            </div>-->
 
             <div class="form-group">
                 <button class="btn btn-lg btn-primary btn-block">Submit!</button>
