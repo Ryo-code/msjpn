@@ -1,4 +1,5 @@
 'use strict';
+//When developing, run "mongod" //When finished, run "git push heroku master" to change your deployed website
 
 const express       = require("express");
 const app           = express();
@@ -14,9 +15,9 @@ const User          = require("./models/user");
 const seedDB        = require("./seeds");
 
 //Requiring Routes
-const commentRoutes     = require("./routes/comments");
-const sightRoutes  = require("./routes/sights");
-const indexRoutes       = require("./routes/index") //Could also have been called "authRoutes" ;)
+const commentRoutes = require("./routes/comments");
+const sightRoutes   = require("./routes/sights");
+const indexRoutes   = require("./routes/index") //Could also have been called "authRoutes" ;)
 
 console.log("Here's what the DATABASEURL environmental variable is:", process.env.DATABASEURL)
 const url = process.env.DATABASEURL || "mongodb://localhost/must_see_japan" //Someone who clones this project will be able to create their own local DB with this code, because the enviro variable won't work for them
