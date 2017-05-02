@@ -1,8 +1,8 @@
 'use strict';
 
-const mongoose      = require("mongoose");
-const Campground    = require("./models/campground");
-const Comment       = require("./models/comment");
+const mongoose = require("mongoose");
+const Sight    = require("./models/sight");
+const Comment  = require("./models/comment");
 
 const data = [
     {
@@ -23,22 +23,22 @@ const data = [
 ]
 
 const seedDB = () => {
-    //Wipe database (i.e. remove existing campgrounds)
-    Campground.remove({}, (err) => {
+    //Wipe database (i.e. remove existing sights)
+    Sight.remove({}, (err) => {
         if(err){
             console.log(err);
         } else {
-            console.log("Removed campgrounds!");
+            console.log("Removed sights!");
             
-            //Create a few campgrounds
+            //Create a few sights
             data.forEach((seed) => {
-                Campground.create(seed, (err, campground) => {
+                Sight.create(seed, (err, sight) => {
                     if(err){
                         console.log(err);
                     } else {
-                        console.log("Successfully seeded a campground!");
+                        console.log("Successfully seeded a sight!");
 
-                        //Create a seeded comment for each campground (they're the same for now, whatever)
+                        //Create a seeded comment for each sight (they're the same for now, whatever)
                         Comment.create(
                             {
                                 text: "This place is great, but I wish there was internet",
@@ -47,8 +47,8 @@ const seedDB = () => {
                                 if(err){
                                     console.log("A comment couldn't be created... ", err);
                                 } else {
-                                    campground.comments.push(comment); //Associate comment with corresponding campground's comment section
-                                    campground.save(); //Save the campground with the new comment
+                                    sight.comments.push(comment); //Associate comment with corresponding sight's comment section
+                                    sight.save(); //Save the sight with the new comment
                                     console.log("Created a new comment!", comment)
                                 }
                             }

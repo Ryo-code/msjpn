@@ -6,7 +6,7 @@
         <h3 style="color: black"> Share your pics of the sights that <em style="font-weight: 600"> must</em> be seen  in Japan!</h3>
         <br>
         <p>
-            <a class="btn btn-default btn-large" href="/campgrounds/new">
+            <a class="btn btn-default btn-large" href="/sights/new">
                 <span class="glyphicon glyphicon-plus-sign"/></span> Add New Must-See! 
             </a>
         </p>
@@ -18,17 +18,17 @@
         <h2> See everyone's must-see pictures here</h2>
     </div>
 
-    <!-- Render the following div for each campground in the DB:-->
-    <% campgrounds.forEach((campground) => { %> 
+    <!-- Render the following div for each sight in the DB:-->
+    <% sights.forEach((sight) => { %> 
         <div class="col-md-3 col-sm-6">
             <div class="thumbnail">
-                  <img src="<%= campground.image %>">
+                  <img src="<%= sight.image %>">
                   <div class="caption">
-                        <h4> <%= campground.name %> </h4>
+                        <h4> <%= sight.name %> </h4>
                   </div>
                   <p>
-                      <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">More Info</a>
-                            <!-- this campground ↑ relates to the forEach's argument, and the _id refers to mongoDB's randomly(& automatically)-generated ID -->
+                      <a href="/sights/<%= sight._id %>" class="btn btn-primary">More Info</a>
+                            <!-- this sight ↑ relates to the forEach's argument, and the _id refers to mongoDB's randomly(& automatically)-generated ID -->
                   </p>
             </div>
         </div>

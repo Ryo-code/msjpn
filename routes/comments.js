@@ -1,28 +1,28 @@
 'use strict'
 const express = require("express");
-const router = express.Router({mergeParams: true}); //this merges the parameters from campgrounds & comments together
-const Campground = require("../models/campground")
+const router = express.Router({mergeParams: true}); //this merges the parameters from sights & comments together
+const Sight = require("../models/sight")
 const Comment = require("../models/comment")
 const middleware = require("../middleware")
 
 //Comments New
 router.get("/new", middleware.isLoggedIn, (req, res) => { //by adding "isLoggedIn", it runs this first. If user is authenticated, it runs the "next" code (which is the callback)
-    Campground.findById(req.params.id, (err, campground) => {
+    Sight.findById(req.params.id, (err, sight) => {
         if(err){
             console.log(err);
         } else {
-           res.render("comments/new", { campground: campground }) 
+           res.render("comments/new", { sight: sight }) 
         }
     })
 });
 
 //Comments Create
 router.post("/", middleware.isLoggedIn, (req, res) => {
-   //lookup campground using ID
-   Campground.findById(req.params.id, (err, campground) => {
+   //lookup sight using ID
+   Sight.findById(req.params.id, (err, sight) => {
        if(err){
            console.log(err);
-           res.redirect("/campgrounds");
+           res.redirect("/sights");
        } else {
         //create new comment
         Comment.create(req.body.comment, (err, comment) => {
@@ -34,14 +34,14 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
                 comment.author.id = req.user._id;
                 comment.author.username = req.user.username;
 
-                //connect new comment to campground
+                //connect new comment to sight
                 comment.save();
-                campground.comments.push(comment);
-                campground.save();
+                sight.comments.push(comment);
+                sight.save();
                 
                 console.log(comment);
-                //redirect campground show page
-                res.redirect('/campgrounds/' + campground._id);
+                //redirect sight show page
+                res.redirect('/sights/' + sight._id);
             }
          });
        }
@@ -54,7 +54,7 @@ router.get("/:comment_id/edit", middleware.checkCommentOwnership, (req, res) => 
       if(err){
           res.redirect("back");
       } else {
-        res.render("comments/edit", {campground_id: req.params.id, comment: foundComment});
+        res.render("comments/edit", {sight_id: req.params.id, comment: foundComment});
       }
    });
 });
@@ -65,7 +65,7 @@ router.put("/:comment_id", (req, res) => {
         if(err){
             res.redirecT("back");
         } else {
-            res.redirect("/campgrounds/" + req.params.id);
+            res.redirect("/sights/" + req.params.id);
         }
     });
 });
@@ -77,7 +77,7 @@ router.delete("/:comment_id", middleware.checkCommentOwnership, (req, res) => {
        if(err){
            res.redirect("back");
        } else {
-           res.redirect("/campgrounds/" + req.params.id);
+           res.redirect("/sights/" + req.params.id);
        }
     });
 });

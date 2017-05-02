@@ -8,14 +8,14 @@ const passport      = require("passport");
 const LocalStrategy = require("passport-local");
 const methodOverride = require("method-override");
 const flash         = require("connect-flash");
-const Campground    = require("./models/campground");
+const Sight         = require("./models/sight");
 const Comment       = require("./models/comment");
 const User          = require("./models/user");
 const seedDB        = require("./seeds");
 
 //Requiring Routes
 const commentRoutes     = require("./routes/comments");
-const campgroundRoutes  = require("./routes/campgrounds");
+const sightRoutes  = require("./routes/sights");
 const indexRoutes       = require("./routes/index") //Could also have been called "authRoutes" ;)
 
 console.log("Here's what the DATABASEURL environmental variable is:", process.env.DATABASEURL)
@@ -51,8 +51,8 @@ app.use((req, res, next) =>{           //This will run for every single route.
 });
 
 app.use(indexRoutes);
-app.use("/campgrounds", campgroundRoutes); //All the campgrounds routes start this way, so in routes/campgrounds.js, you don't need to write that anymore (just what comes after that)
-app.use("/campgrounds/:id/comments", commentRoutes); //Same thing for comments... this just keeps the code DRY
+app.use("/sights", sightRoutes); //All the sights routes start this way, so in routes/sights.js, you don't need to write that anymore (just what comes after that)
+app.use("/sights/:id/comments", commentRoutes); //Same thing for comments... this just keeps the code DRY
 
 app.listen(3000, () => {
   console.log('The server has started (on port 3000)!')

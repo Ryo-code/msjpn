@@ -26,7 +26,7 @@ router.post("/register", (req, res) =>{
         }
         passport.authenticate("local")(req, res, () => {
             req.flash("success", "Welcome to Must-See Japan, " + user.username);
-            res.redirect("/campgrounds");
+            res.redirect("/sights");
         });
     });
 });
@@ -41,7 +41,7 @@ router.get("/login", (req, res) => {
 router.post("/login", passport.authenticate("local",       // The ".authenticate" method takes the
     //form's req.body.password & req.body.username, and searches for them in the DB (ie. authenticates them)
     {
-        successRedirect: "/campgrounds",
+        successRedirect: "/sights",
         failureRedirect: "/login"
     }), (req, res) => {
 });
@@ -50,7 +50,7 @@ router.post("/login", passport.authenticate("local",       // The ".authenticate
 router.get("/logout", (req, res) => {
     req.logout();
     req.flash("success", "Logged you out!");
-    res.redirect("/campgrounds");
+    res.redirect("/sights");
 });
 
 module.exports = router;

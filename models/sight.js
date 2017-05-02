@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 
 //SCHEMA SETUP (note: schema is the structure/organization of a database)
-const campgroundSchema = new mongoose.Schema({
+const sightSchema = new mongoose.Schema({
     name: String,
     image: String,
     description: String,
@@ -27,6 +27,6 @@ const campgroundSchema = new mongoose.Schema({
     ]
 });
 
-module.exports = mongoose.model("Campground", campgroundSchema);
-//This line turns the schema (ie. blueprint) of what a campground is, and
+module.exports = mongoose.model("Sight", sightSchema);
+//This line turns the schema (ie. blueprint) of what a sight is, and
 //compiles it into a model which has a bunch of methods like .find() & .create()

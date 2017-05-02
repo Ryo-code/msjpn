@@ -14,21 +14,21 @@
     </div>
     <div class="col-md-9">
         <div class="thumbnail">
-            <img class="img-responsive" src="<%= campground.image %>">
+            <img class="img-responsive" src="<%= sight.image %>">
             <div class="caption-full">
                 <p class="pull-right"> 
                     <em>
-                        Submitted by <strong><%= campground.author.username %></strong> (<%= moment(campground.createdAt).fromNow() %>)
+                        Submitted by <strong><%= sight.author.username %></strong> (<%= moment(sight.createdAt).fromNow() %>)
                     </em>
                 </p>
-                <h4><a><%=campground.name%></a></h4>
-                <p><%= campground.description %></p>
+                <h4><a><%=sight.name%></a></h4>
+                <p><%= sight.description %></p>
 
-                <% if(currentUser && campground.author.id.equals(currentUser._id)){ %>
-                    <a class="btn btn-warning" href="/campgrounds/<%= campground._id%>/edit">
-                        Edit Campground
+                <% if(currentUser && sight.author.id.equals(currentUser._id)){ %>
+                    <a class="btn btn-warning" href="/sights/<%= sight._id%>/edit">
+                        Edit Sight
                     </a>
-                    <form class="delete-form" action="/campgrounds/<%=campground._id %>?_method=DELETE" method="POST">
+                    <form class="delete-form" action="/sights/<%=sight._id %>?_method=DELETE" method="POST">
                         <input type="submit" class="btn btn-danger" value="Delete">
                     </form>
                 <% } %>
@@ -36,10 +36,10 @@
         </div>
         <div class="well">
             <div class="text-right">
-                <a class="btn btn-success" href="/campgrounds/<%= campground._id %>/comments/new">Add New Comment</a>
+                <a class="btn btn-success" href="/sights/<%= sight._id %>/comments/new">Add New Comment</a>
             </div>
             <hr>
-            <% campground.comments.forEach((comment) => { %>
+            <% sight.comments.forEach((comment) => { %>
                 <div class="row">
                     <div class="col-md-12">
                         <strong><%= comment.author.username %></strong>
@@ -52,13 +52,13 @@
                         <% if(currentUser && comment.author.id.equals(currentUser._id)){ %>
                             <a
                                 class="btn btn-xs btn-warning"
-                                href="/campgrounds/<%= campground._id %>/comments/<%= comment._id%>/edit"
+                                href="/sights/<%= sight._id %>/comments/<%= comment._id%>/edit"
                             >
                                 Edit
                             </a>
 
                             <!--The delete route must be a form, because unlike the anchor tag above, forms can make POST requests (a tags only make GET reqs)-->
-                            <form class="delete-form" action="/campgrounds/<%=campground._id %>/comments/<%=comment._id %>?_method=DELETE" method="POST">
+                            <form class="delete-form" action="/sights/<%=sight._id %>/comments/<%=comment._id %>?_method=DELETE" method="POST">
                                 <input type="submit" class="btn btn-xs btn-danger" value="Delete">
                             </form>
                         <% } %>
@@ -71,8 +71,8 @@
 
 <script>
   function initMap() {
-    var lat = <%= campground.lat %>;
-    var lng = <%= campground.lng %>;
+    var lat = <%= sight.lat %>;
+    var lng = <%= sight.lng %>;
     var center = {lat: lat, lng: lng };
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 8,
@@ -80,9 +80,9 @@
         scrollwheel: false
     });
     var contentString = `
-      <strong><%= campground.name %><br />
-      <%= campground.location %></strong>
-      <p><%= campground.description %></p>
+      <strong><%= sight.name %><br />
+      <%= sight.location %></strong>
+      <p><%= sight.description %></p>
     `
     var infowindow = new google.maps.InfoWindow({
       content: contentString
