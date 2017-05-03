@@ -55,6 +55,6 @@ app.use(indexRoutes);
 app.use("/sights", sightRoutes); //All the sights routes start this way, so in routes/sights.js, you don't need to write that anymore (just what comes after that)
 app.use("/sights/:id/comments", commentRoutes); //Same thing for comments... this just keeps the code DRY
 
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log('The server has started (on port 3000)!')
 })
